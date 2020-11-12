@@ -1,0 +1,18 @@
+# ignore Intellij-IDEA files
+*.iml
+*.ipr
+*.iws
+*.classpath
+*.settings
+*.project
+*.idea
+.DS_Store
+
+# ignore logs
+*.log
+
+# ignore target directories
+target/
+
+## various other file types we don't want to have in the repository:
+.DS_Store
