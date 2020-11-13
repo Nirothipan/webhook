@@ -20,6 +20,10 @@ package org.wso2.carbon.webhook;
 
 public class WebHookConstants {
 
+    private WebHookConstants() {
+        // do nothing
+    }
+
     public static final String BACK_SLASH = "/";
     public static final String HUB_SIGNATURE_HEADER_NAME = "X-Hub-Signature";
     public static final String CLIENT_CALL_BACK_URL_QUERY_PARAM = "client-call-back";

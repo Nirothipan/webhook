@@ -25,6 +25,7 @@ import org.apache.synapse.core.SynapseEnvironment;
 import org.apache.synapse.mediators.AbstractMediator;
 import org.apache.synapse.rest.RESTUtils;
 import org.wso2.carbon.webhook.secret.manager.WebHookSecretManager;
+import org.wso2.carbon.webhook.stat.publisher.WebHookStatPublisher;
 import org.wso2.carbon.webhook.throttle.processor.ThrottleProcessor;
 import org.wso2.carbon.webhook.utils.WebHookUtils;
 
@@ -38,17 +39,13 @@ import static org.wso2.carbon.webhook.WebHookConstants.HUB_SIGNATURE_HEADER_NAME
 public class WebHookEventHandler extends AbstractMediator implements ManagedLifecycle {
 
     private ThrottleProcessor throttleProcessor;
-    private WebHookSecretManager secretManager;
+    private WebHookStatPublisher statPublisher;
 
     @Override
     public void init(SynapseEnvironment synapseEnvironment) {
 
         throttleProcessor = new ThrottleProcessor();
-        try {
-            secretManager = new WebHookSecretManager("secret");
-        } catch (Exception e) {
-            log.error("Exception ", e);
-        }
+        statPublisher = new WebHookStatPublisher("event");
     }
 
     public boolean mediate(MessageContext synCtx) {
@@ -59,6 +56,7 @@ public class WebHookEventHandler extends AbstractMediator implements ManagedLife
 
         String[] urlSegments = requestPath.split(BACK_SLASH);
 
+        // todo : consider tenancy here
         if (urlSegments.length < 4) {
             log.error("Invalid request with path " + requestPath);
             // handle error
@@ -110,6 +108,9 @@ public class WebHookEventHandler extends AbstractMediator implements ManagedLife
 
         // set To Header
         synCtx.setTo(new EndpointReference(clientCallbackUrl));
+
+        // stat
+        statPublisher.publishStat();
         return true;
     }
 

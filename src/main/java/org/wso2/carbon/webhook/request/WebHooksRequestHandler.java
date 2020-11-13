@@ -23,18 +23,18 @@ import org.apache.synapse.MessageContext;
 import org.apache.synapse.core.SynapseEnvironment;
 import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.apache.synapse.mediators.AbstractMediator;
-import org.wso2.carbon.webhook.stat.publisher.WebhooksStatPublisher;
+import org.wso2.carbon.webhook.stat.publisher.WebHookStatPublisher;
 import org.wso2.carbon.webhook.utils.WebHookUtils;
 
 import java.io.UnsupportedEncodingException;
 
 public class WebHooksRequestHandler extends AbstractMediator implements ManagedLifecycle {
 
-    WebhooksStatPublisher statPublisher;
+    WebHookStatPublisher statPublisher;
 
     @Override
     public void init(SynapseEnvironment synapseEnvironment) {
-        statPublisher = new WebhooksStatPublisher();
+        statPublisher = new WebHookStatPublisher("request");
     }
 
     @Override
@@ -44,8 +44,8 @@ public class WebHooksRequestHandler extends AbstractMediator implements ManagedL
         addSecurityHeader(messageContext);
 
         String api = (String) ((Axis2MessageContext) messageContext).getProperty("SYNAPSE_REST_API");
-        String callback = ((String)((Axis2MessageContext) messageContext).getProperty("callback"));
-        String topic = ((String)((Axis2MessageContext) messageContext).getProperty("callback"));
+        String callback = ((String) ((Axis2MessageContext) messageContext).getProperty("callback"));
+        String topic = ((String) ((Axis2MessageContext) messageContext).getProperty("callback"));
         String encodedCallback = callback;
         String encodedTopic = topic;
         try {
@@ -62,7 +62,7 @@ public class WebHooksRequestHandler extends AbstractMediator implements ManagedL
         storeData();
 
         generateHubSecret();
-        
+
         return true;
     }
 

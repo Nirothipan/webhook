@@ -18,9 +18,15 @@
 
 package org.wso2.carbon.webhook.stat.publisher;
 
-public class WebhooksStatPublisher {
+public class WebHookStatPublisher {
 
-    public void publishStat () {
+    private String flowType;
+
+    public WebHookStatPublisher(String flowType) {
+        this.flowType = flowType;
+    }
+
+    public void publishStat() {
         //implement
     }
 }
