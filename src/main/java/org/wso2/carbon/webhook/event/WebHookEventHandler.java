@@ -29,10 +29,8 @@ import org.wso2.carbon.webhook.throttle.processor.ThrottleProcessor;
 import org.wso2.carbon.webhook.utils.WebHookUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import static java.net.URLDecoder.decode;
 import static org.wso2.carbon.webhook.WebHookConstants.BACK_SLASH;
 import static org.wso2.carbon.webhook.WebHookConstants.CLIENT_CALL_BACK_URL_QUERY_PARAM;
 import static org.wso2.carbon.webhook.WebHookConstants.HUB_SIGNATURE_HEADER_NAME;
@@ -92,7 +90,7 @@ public class WebHookEventHandler extends AbstractMediator implements ManagedLife
         log.info("Client call back url : " + clientCallbackUrl);
         try {
             // todo :  change to query param
-            clientCallbackUrl = decode(urlSegments[3], StandardCharsets.UTF_8.name());
+            clientCallbackUrl = WebHookUtils.decodeURI(urlSegments[3]);
         } catch (UnsupportedEncodingException e) {
             log.error("Error in decoding call back url", e);
             // handle error

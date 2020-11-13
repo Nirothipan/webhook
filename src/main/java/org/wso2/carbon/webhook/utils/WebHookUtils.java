@@ -51,12 +51,16 @@ public class WebHookUtils {
         header.put(headerName, headerValue);
     }
 
-    public static String getQueryParam(MessageContext synCtx, String paramName){
+    public static String getQueryParam(MessageContext synCtx, String paramName) {
 
         return (String) synCtx.getProperty(RESTConstants.REST_QUERY_PARAM_PREFIX + paramName);
     }
 
     public static String encodeURI(String url) throws UnsupportedEncodingException {
-        return  URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
+        return URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
+    }
+
+    public static String decodeURI(String url) throws UnsupportedEncodingException {
+        return URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
     }
 }
