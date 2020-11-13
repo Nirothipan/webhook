@@ -56,10 +56,13 @@ public class WebHooksRequestHandler extends AbstractMediator implements ManagedL
         }
         String endpointURL = constructEndpointURL();
         String newCallBackURL = endpointURL + "/" + api + "/" + encodedTopic + "/" + encodedCallback;
-        storeData();
-        generateHubSecret();
+
         appendCallBackURL();
 
+        storeData();
+
+        generateHubSecret();
+        
         return true;
     }
 
