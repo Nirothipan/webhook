@@ -1,0 +1,6 @@
+<sequence xmlns="http://ws.apache.org/ns/synapse" name="webhook">
+    <property name="topic" expression="$url:hub.topic"/>
+    <property name="callback" expression="$url:hub.callback"/>
+    <class name="org.wso2.carbon.webhook.request.WebHooksRequestHandler">
+    </class>
+</sequence>

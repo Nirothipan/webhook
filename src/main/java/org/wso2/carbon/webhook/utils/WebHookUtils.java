@@ -22,6 +22,9 @@ import org.apache.synapse.MessageContext;
 import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.apache.synapse.rest.RESTConstants;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class WebHookUtils {
@@ -51,5 +54,9 @@ public class WebHookUtils {
     public static String getQueryParam(MessageContext synCtx, String paramName){
 
         return (String) synCtx.getProperty(RESTConstants.REST_QUERY_PARAM_PREFIX + paramName);
+    }
+
+    public static String encodeURI(String url) throws UnsupportedEncodingException {
+        return  URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
     }
 }
