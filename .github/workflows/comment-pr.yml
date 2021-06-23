@@ -31,9 +31,5 @@ jobs:
         with:
           java-version: 1.8
       - name: Checkout MI
-          uses: actions/checkout@v1
-          with:
-            repository: wso2/micro-integrator
-            ref: refs/heads/master
-            - name: Build MI with Maven
-              run: mvn clean -Dsynapse.version=$(cat ../SYNAPSE_VERSION_FILE)
+          run: |
+            echo second hi
