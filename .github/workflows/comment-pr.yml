@@ -17,17 +17,23 @@ jobs:
           echo say hello ${{github.event.comment.body}}
           BODY=$(echo ${{github.event.comment.body}})
           a=( $BODY )
-          echo ${a[0]}
-          echo ${a[1]}
           COMP=${a[1]}
           echo $COMP
           echo "::set-output name=component::$COMP"
         id: component
-      - name: Checkout Synapse
+      - name: Checkout Tests
         uses: actions/checkout@v1
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Build Synapse with Maven
-        run: mvn clean -Dsynapse.version=${{ steps.component.outputs.component }}
+      - name: Checkout REPO
+        uses: actions/checkout@v1
+        with:
+          repository: Nirothipan/webhook
+          ref: refs/heads/master
+      - name: Run Tests
+        run: |
+        mvn clean compile test-compile verify -Dgroup=smoke
+        mvn verify -pl :${{ steps.component.outputs.component }} -am
+        mvn surefire-report:failsafe-report-only -Daggregate=true
