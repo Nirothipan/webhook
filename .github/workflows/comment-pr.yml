@@ -18,10 +18,12 @@ jobs:
           BODY=$(echo ${{github.event.comment.body}})
           NAME=$BODY[0]
           echo Name $NAME
-          s=$(echo ${{github.event.comment.body}})
+          s='foo bar baz'
           a=( $s )
+          echo start
           echo ${a[0]}
           echo ${a[1]}
+          echo end
 
   notify:
     needs: build
