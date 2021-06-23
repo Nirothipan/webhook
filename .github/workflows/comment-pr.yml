@@ -11,10 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy Docker image to Google Cloud Run
+      - name: get-name
         if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
         run: |
           echo say hello ${{github.event.comment.body}}
+          BODY=$(echo ${{github.event.comment.body}})
+          NAME=$BODY[0]
+          echo Name $NAME
 
   notify:
     needs: build
