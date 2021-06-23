@@ -34,6 +34,6 @@ jobs:
           ref: refs/heads/master
       - name: Run Tests
         run: |
-        mvn clean compile test-compile verify -Dgroup=smoke
-        mvn verify -pl :${{ steps.component.outputs.component }} -am
-        mvn surefire-report:failsafe-report-only -Daggregate=true
+          mvn clean compile test-compile verify -Dgroup=smoke
+          mvn verify -pl :${{ steps.component.outputs.component }} -am
+          mvn surefire-report:failsafe-report-only -Daggregate=true
