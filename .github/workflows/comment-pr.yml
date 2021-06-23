@@ -31,5 +31,5 @@ jobs:
         with:
           java-version: 1.8
       - name: Checkout MI
-          run: |
-            echo second hi
+        run: |
+          echo say hello 222222
