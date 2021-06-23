@@ -20,14 +20,9 @@ jobs:
           echo ${a[0]}
           echo ${a[1]}
           COMP=${a[1]}
-          echo $COMP > ../comp
-          echo "::set-output name=name::$NAME"
-
-  notify:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
+          echo $COMP
+          echo "::set-output name=component::$COMP"
+        id: component
       - name: Checkout Synapse
         uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -35,4 +30,4 @@ jobs:
         with:
           java-version: 1.8
       - name: Build Synapse with Maven
-        run: mvn clean -Dsynapse.version=$(cat ../comp)
+        run: mvn clean -Dsynapse.version=${{ steps.component.outputs.component }}
