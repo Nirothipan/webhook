@@ -14,7 +14,7 @@ jobs:
       - name: Deploy Docker image to Google Cloud Run
         if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
         run: |
-          echo say helloRAM
+          echo say helloRAM ${{github.event.comment.body}}
 
   notify:
     needs: build
@@ -27,5 +27,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Build Synapse with Maven
-        run: mvn clean install --file pom.xml
+      - name: Checkout MI
+          uses: actions/checkout@v1
+          with:
+            repository: wso2/micro-integrator
+            ref: refs/heads/master
+            - name: Build MI with Maven
+              run: mvn clean -Dsynapse.version=$(cat ../SYNAPSE_VERSION_FILE)
