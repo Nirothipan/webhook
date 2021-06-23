@@ -16,14 +16,12 @@ jobs:
         run: |
           echo say hello ${{github.event.comment.body}}
           BODY=$(echo ${{github.event.comment.body}})
-          NAME=$BODY[0]
-          echo Name $NAME
-          s='foo bar baz'
-          a=( $s )
-          echo start
+          a=( $BODY )
           echo ${a[0]}
           echo ${a[1]}
-          echo end
+          COMP=${a[1]}
+          echo $COMP > ../comp
+          echo "::set-output name=name::$NAME"
 
   notify:
     needs: build
@@ -37,4 +35,4 @@ jobs:
         with:
           java-version: 1.8
       - name: Build Synapse with Maven
-        run: mvn clean -Dsynapse.version=$(cat ../SYNAPSE_VERSION_FILE)
+        run: mvn clean -Dsynapse.version=$(cat ../comp)
