@@ -14,7 +14,7 @@ jobs:
       - name: Deploy Docker image to Google Cloud Run
         if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
         run: |
-          echo say helloRAM ${{github.event.comment.body}}
+          echo say hello ${{github.event.comment.body}}
 
   notify:
     needs: build
