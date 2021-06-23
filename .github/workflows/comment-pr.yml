@@ -5,12 +5,14 @@ on:
 
 jobs:
   build:
+    if: contains(github.event.comment.html_url, '/pull/')    # check if the comments come from pull request, exclude those from issue.
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Deploy Docker image to Google Cloud Run
+        if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
         run: |
           echo say helloRAM
 
