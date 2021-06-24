@@ -95,15 +95,21 @@ jobs:
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITHUB_TOKEN" \
             --data '{ "body": ":facepalm: [ci integration job failed]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'
-      - name: HTML Preview2
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
-        with:
-          html_file: 'failsafe-report.html'
-       uses: github-actions-up-and-running/pr-comment@v1.0.0
+#      - name: HTML Preview2
+#        id: html_preview
+#        uses: pavi2410/html-preview-action@v2
+#        with:
+#          html_file: 'failsafe-report.html'
+#       uses: github-actions-up-and-running/pr-comment@v1.0.0
+#          with:
+#            repo-token: ${{ secrets.GITHUB_TOKEN }}
+#            message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
+      - name: Publish Test Repor
+          if: steps.check.outputs.triggered == 'true' && (failure() || success())
+          uses: scacap/action-surefire-report@v1
           with:
-            repo-token: ${{ secrets.GITHUB_TOKEN }}
-            message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            check_name: integration_test_results
       - name: Publish Test Report
         if: steps.check.outputs.triggered == 'true' && (failure() || success())
         env:
