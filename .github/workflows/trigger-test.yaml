@@ -99,7 +99,7 @@ jobs:
         id: html_preview
         uses: pavi2410/html-preview-action@v2
         with:
-          html_file: './target/site/failsafe-report.html'
+          html_file: 'failsafe-report.html'
       - name: Publish Test Report
         if: steps.check.outputs.triggered == 'true' && (failure() || success())
         env:
@@ -108,8 +108,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: './target/site/failsafe-report.html'
-#        run: |
-#          echo component name ${{ steps.html_preview.outputs.url }}
+        run: |
+          echo component name ${{ steps.html_preview.outputs.url }}
 #          curl \
 #            -X POST \
 #            $URL \
