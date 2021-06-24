@@ -54,4 +54,5 @@ jobs:
 #          html_file: 'failsafe-report.html'
         uses: github-actions-up-and-running/pr-comment@v1.0.0
         with:
-          message: ${{ format('[Test Results](./target/site/failsafe-report.html)') }}
+          message: ${{ format('Hello World!') }}
+#          message: ${{ format('[Test Results](./target/site/failsafe-report.html)') }}
