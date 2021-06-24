@@ -95,6 +95,9 @@ jobs:
             --data '{ "body": ":facepalm: [ci integration job failed]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'
       - name: Publish Test Report
         if: steps.check.outputs.triggered == 'true' && (failure() || success())
+        env:
+          URL: ${{ github.event.issue.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl \
             -X POST \
