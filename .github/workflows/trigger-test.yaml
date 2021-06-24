@@ -105,9 +105,9 @@ jobs:
         env:
           URL: ${{ github.event.issue.comments_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/upload-artifact@v2
-        with:
-          path: './target/site/failsafe-report.html'
+#        uses: actions/upload-artifact@v2
+#        with:
+#          path: './target/site/failsafe-report.html'
         run: |
           echo component name ${{ steps.html_preview.outputs.url }}
 #          curl \
