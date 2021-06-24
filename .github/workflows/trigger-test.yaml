@@ -57,14 +57,15 @@ jobs:
         uses: actions/checkout@master
         if: steps.check.outputs.triggered == 'true' 
         with: 
-          repository: logrhythm/boreas-test
+          repository: Nirothipan/webhook
           token: ${{ secrets.PAT_TOKEN }}
       - name: Build with Maven
         if: steps.check.outputs.triggered == 'true'
         run: |
-          mvn clean compile test-compile verify -PApiSmoke 
-          mvn verify -pl :${{ steps.component.outputs.component }} -am
-          mvn surefire-report:failsafe-report-only -Daggregate=true 
+          mvn clean
+#          mvn clean compile test-compile verify -PApiSmoke
+#          mvn verify -pl :${{ steps.component.outputs.component }} -am
+#          mvn surefire-report:failsafe-report-only -Daggregate=true
       - name: Create success comment
         if:  steps.check.outputs.triggered == 'true' &&  success()
 
