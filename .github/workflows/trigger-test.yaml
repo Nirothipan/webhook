@@ -111,4 +111,4 @@ jobs:
             $URL \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            --data '{ "body": ":v: [Results](${{steps.html_preview.outputs.url}})" }'
+            --data '{ "body": ":v: ${{ steps.html_preview.outputs.url }} " }'
