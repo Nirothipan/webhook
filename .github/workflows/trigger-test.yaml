@@ -11,7 +11,7 @@ jobs:
           trigger: '/integration-test'
           reaction: rocket
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          GITHUB_TOKEN: '${{ secrets.TOKEN }}'
       - name: send comment 
         if: steps.check.outputs.triggered == 'true'
         env:
@@ -36,7 +36,7 @@ jobs:
         if: steps.check.outputs.triggered == 'true'
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           repository: ${{ (steps.request.outputs.data).head.repo.full_name }}
           ref: ${{ steps.pr_data.outputs.branch }}
       - name: debug
