@@ -38,6 +38,8 @@ jobs:
 #          mvn clean compile test-compile verify -Dgroup=smoke
 #          mvn verify -pl :${{ steps.component.outputs.component }} -am
 #          mvn surefire-report:failsafe-report-only -Daggregate=true
-      - name: Publish Test Report
-        if: ${{ always() }}
-        uses: scacap/action-surefire-report@v1
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: target/**/*.html
