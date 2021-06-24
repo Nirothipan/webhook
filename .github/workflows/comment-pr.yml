@@ -38,8 +38,12 @@ jobs:
 #          mvn clean compile test-compile verify -Dgroup=smoke
 #          mvn verify -pl :${{ steps.component.outputs.component }} -am
 #          mvn surefire-report:failsafe-report-only -Daggregate=true
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
+#      - name: Publish Unit Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@v1
+#        if: always()
+#        with:
+#          files: target/**/*.html
+      - name: Results
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          files: target/**/*.html
+          lcov-file: ./target/site/failsafe-report.html
