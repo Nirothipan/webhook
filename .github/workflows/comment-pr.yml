@@ -10,7 +10,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: get-name
         if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
         run: |
@@ -35,6 +34,13 @@ jobs:
       - name: Run Tests
         run: |
           echo component name ${{ steps.component.outputs.component }}
+      - uses: mshick/add-pr-comment@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            message: |
+              **Hello MASTER**
+            allow-repeats: true
 #          mvn clean compile test-compile verify -Dgroup=smoke
 #          mvn verify -pl :${{ steps.component.outputs.component }} -am
 #          mvn surefire-report:failsafe-report-only -Daggregate=true
@@ -47,13 +53,13 @@ jobs:
 #        uses: romeovs/lcov-reporter-action@v0.2.16
 #        with:
 #          lcov-file: ./target/site/failsafe-report.html
-      - name: HTML Preview
-        id: html_preview
-#        uses: pavi2410/html-preview-action@v2
+#      - name: HTML Preview
+#        id: html_preview
+##        uses: pavi2410/html-preview-action@v2
+##        with:
+##          html_file: 'failsafe-report.html'
+#        uses: github-actions-up-and-running/pr-comment@v1.0.0
 #        with:
-#          html_file: 'failsafe-report.html'
-        uses: github-actions-up-and-running/pr-comment@v1.0.0
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: ${{ format('Hello World!') }}
-#          message: ${{ format('[Test Results](./target/site/failsafe-report.html)') }}
+#          message: ${{ format('Hello World!') }}
+##          message: ${{ format('[Test Results](./target/site/failsafe-report.html)') }}
+
