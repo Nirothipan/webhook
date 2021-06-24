@@ -105,11 +105,11 @@ jobs:
 #            repo-token: ${{ secrets.GITHUB_TOKEN }}
 #            message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
       - name: Publish Test Repor
-          if: steps.check.outputs.triggered == 'true' && (failure() || success())
-          uses: scacap/action-surefire-report@v1
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            check_name: integration_test_results
+        if: steps.check.outputs.triggered == 'true' && (failure() || success())
+        uses: scacap/action-surefire-report@v1
+        with:
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+           check_name: integration_test_results
       - name: Publish Test Report
         if: steps.check.outputs.triggered == 'true' && (failure() || success())
         env:
