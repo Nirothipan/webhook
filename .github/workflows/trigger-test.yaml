@@ -106,6 +106,7 @@ jobs:
           URL: ${{ github.event.issue.comments_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo component name ${{ steps.html_preview.outputs.url }}
           curl \
             -X POST \
             $URL \
