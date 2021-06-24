@@ -56,12 +56,12 @@ jobs:
       - name: checkout to boreas-test repo
         env:
           URL: ${{ github.event.issue.comments_url }}
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          PAT_TOKEN: ${{ secrets.TOKEN }}
         uses: actions/checkout@master
         if: steps.check.outputs.triggered == 'true' 
         with: 
           repository: Nirothipan/test-connector
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
       - name: Build with Maven
         if: steps.check.outputs.triggered == 'true'
         run: |
