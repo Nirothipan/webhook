@@ -105,11 +105,14 @@ jobs:
         env:
           URL: ${{ github.event.issue.comments_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo component name ${{ steps.html_preview.outputs.url }}
-          curl \
-            -X POST \
-            $URL \
-            -H "Content-Type: application/json" \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            --data '{ "body": ":v: ${{ steps.html_preview.outputs.url }} " }'
+      - uses: actions/upload-artifact@v2
+        with:
+          path: './target/site/failsafe-report.html'
+#        run: |
+#          echo component name ${{ steps.html_preview.outputs.url }}
+#          curl \
+#            -X POST \
+#            $URL \
+#            -H "Content-Type: application/json" \
+#            -H "Authorization: token $GITHUB_TOKEN" \
+#            --data '{ "body": ":v: ${{ steps.html_preview.outputs.url }} " }'
