@@ -98,9 +98,9 @@ jobs:
       - name: HTML Preview
         id: html_preview
         uses: pavi2410/html-preview-action@v1a
-          with:
-            msg: 'Click here to open test result in browser'
-            html_file: 'failsafe-report.html'
+        with:
+          msg: 'Click here to open test result in browser'
+          html_file: 'failsafe-report.html'
       - name: Publish Test Report
         if: steps.check.outputs.triggered == 'true' && (failure() || success())
         env:
