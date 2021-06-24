@@ -43,7 +43,12 @@ jobs:
 #        if: always()
 #        with:
 #          files: target/**/*.html
-      - name: Results
-        uses: romeovs/lcov-reporter-action@v0.2.16
+#      - name: Results
+#        uses: romeovs/lcov-reporter-action@v0.2.16
+#        with:
+#          lcov-file: ./target/site/failsafe-report.html
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
         with:
-          lcov-file: ./target/site/failsafe-report.html
+          html_file: './target/site/failsafe-report.html'
