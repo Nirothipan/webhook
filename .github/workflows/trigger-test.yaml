@@ -1,0 +1,101 @@
+name: trigger integration test on update
+on: [issue_comment]
+
+jobs:
+  trigger-integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: khan/pull-request-comment-trigger@master
+        id: check
+        with:
+          trigger: '/integration-test'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - name: send comment 
+        if: steps.check.outputs.triggered == 'true'
+        env:
+          URL: ${{ github.event.issue.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            $URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            --data '{ "body": ":test_tube: [starting ci integration job]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'
+      - name: Get PR informations
+        if: steps.check.outputs.triggered == 'true'
+        id: pr_data
+        run: |
+          echo "::set-output name=branch::${{ (steps.request.outputs.data).head.ref }}"
+          echo "::set-output name=repo_name::${{ (steps.request.outputs.data).head.repo.full_name }}"
+          echo "::set-output name=repo_clone_url::${{ (steps.request.outputs.data).head.repo.clone_url }}"
+          echo "::set-output name=repo_ssh_url::${{ (steps.request.outputs.data).head.repo.ssh_url }}"
+      - name: Checkout PR Branch
+        if: steps.check.outputs.triggered == 'true'
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ (steps.request.outputs.data).head.repo.full_name }}
+          ref: ${{ steps.pr_data.outputs.branch }}
+      - name: debug
+        if: steps.check.outputs.triggered == 'true'
+        id: debug
+        run: |
+          echo ::set-output name=sha::$( curl -u "u:${{github.token}}" https://api.github.com/repos/${{steps.pr_data.outputs.repo_name}}/git/ref/heads/${{steps.pr_data.outputs.branch}} | jq .object.sha | tr -d '"' )
+      - name: get-name of the service
+        if: contains(github.event.comment.body, '/integration-test')
+        id: component
+        run: |
+          BODY=$(echo ${{github.event.comment.body}})
+          a=( $BODY )
+          COMP=${a[2]}
+          echo $COMP
+          echo "::set-output name=component::$COMP"
+      - name: checkout to boreas-test repo
+        uses: actions/checkout@master
+        if: steps.check.outputs.triggered == 'true' 
+        with: 
+          repository: logrhythm/boreas-test
+          token: ${{ secrets.PAT_TOKEN }}
+      - name: Build with Maven
+        if: steps.check.outputs.triggered == 'true'
+        run: |
+          mvn clean compile test-compile verify -PApiSmoke 
+          mvn verify -pl :${{ steps.component.outputs.component }} -am
+          mvn surefire-report:failsafe-report-only -Daggregate=true 
+      - name: Create success comment
+        if:  steps.check.outputs.triggered == 'true' &&  success()
+
+        env:
+          URL: ${{ github.event.issue.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            $URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            --data '{ "body": ":v: [finish ci integration job successfully]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'    
+
+      - name: Create fail comment
+        if:  steps.check.outputs.triggered == 'true' && failure()
+
+        env:
+          URL: ${{ github.event.issue.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            $URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            --data '{ "body": ":facepalm: [ci integration job failed]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'
+      - name: Publish Test Report
+        if: steps.check.outputs.triggered == 'true' && (failure() || success())
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ steps.debug.outputs.sha }}
+          check_name: integration_test_results  
