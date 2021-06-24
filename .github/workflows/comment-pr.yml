@@ -34,6 +34,10 @@ jobs:
           ref: refs/heads/master
       - name: Run Tests
         run: |
-          mvn clean compile test-compile verify -Dgroup=smoke
-          mvn verify -pl :${{ steps.component.outputs.component }} -am
-          mvn surefire-report:failsafe-report-only -Daggregate=true
+          echo component name ${{ steps.component.outputs.component }}
+#          mvn clean compile test-compile verify -Dgroup=smoke
+#          mvn verify -pl :${{ steps.component.outputs.component }} -am
+#          mvn surefire-report:failsafe-report-only -Daggregate=true
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: scacap/action-surefire-report@v1
